@@ -240,6 +240,7 @@ function setCloudStatus(text,ok=true){const el=document.getElementById('cloudSta
 const $=id=>document.getElementById(id);
 const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(Number(n||0));
 const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const safe=esc; // Alias usado por el módulo de choferes para escapar texto HTML
 const uid=()=>crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);
 function calc(m){const cantidad=Math.max(1,+m.cantidadTransportes||1);const costoUnitario=+m.costoBase||0,precioUnitario=+m.precioBase||0;const cb=costoUnitario*cantidad,pb=precioUnitario*cantidad;const ivaS=m.facturaSocio==='si'?cb*(+m.ivaSocioTasa||0)/100:0;const ivaC=m.facturaCliente==='si'?pb*(+m.ivaClienteTasa||0)/100:0;const retS=m.facturaSocio==='si'?cb*(+m.retSocioTasa||0)/100:0;const retC=m.facturaCliente==='si'?pb*(+m.retClienteTasa||0)/100:0;const pagoSocio=cb+ivaS-retS;const cobroCliente=pb+ivaC-retC;return{cantidad,costoUnitario,precioUnitario,costoBaseTotal:cb,precioBaseTotal:pb,ivaS,ivaC,retS,retC,pagoSocio,cobroCliente,margen:pb-cb,ivaNeto:ivaC-ivaS,flujo:cobroCliente-pagoSocio}}
 function partnerName(id){return db.partners.find(p=>p.id===id)?.name||'Sin socio'}
